@@ -6,6 +6,7 @@
         public string GivenName { get; set; }
         public string Surname { get; set; }
         public string UserName { get { return Email; } }
+        public string Password { get; set; }
         public string DisplayName
         {
             get
@@ -14,8 +15,6 @@
             }
         }
         public bool IsActive { get; set; }
-        public bool AdminRole { get; set; }
-        public bool StaffRole { get; set; }
-        public bool VolunteerRole { get; set; }
+        public int RoleId { get; set; }
     }
 }

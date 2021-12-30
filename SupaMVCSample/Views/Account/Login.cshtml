@@ -5,22 +5,22 @@
 
 <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
 <div class="card-body">
-    <form>
+    <form id="signInUser" method="post" action="" novalidate="novalidate">
         <div class="form-floating mb-3">
-            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
-            <label for="inputEmail">Email address</label>
+            <input class="form-control" id="Email" type="email" name="Email" placeholder="name@example.com" />
+            <label for="Email">Email address</label>
         </div>
         <div class="form-floating mb-3">
-            <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
-            <label for="inputPassword">Password</label>
+            <input class="form-control" id="Password" name="Password" type="password" placeholder="Password" />
+            <label for="Password">Password</label>
         </div>
         <div class="form-check mb-3">
             <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
             <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
         </div>
         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-            <a class="small" href="password.html">Forgot Password?</a>
-            <a class="btn btn-primary" href="index.html">Login</a>
+            <a class="small" href="javascript:void(0)">Forgot Password?</a>
+            <button type="submit" class="btn btn-primary">Login</button>
         </div>
     </form>
 </div>
@@ -28,3 +28,56 @@
     <div class="small"><a asp-area="" asp-controller="Account" asp-action="Register">Need an account? Sign up!</a></div>
 </div>
 
+@section Scripts{
+<script>
+        $(document).ready( function () {
+         $( "#createUserAccount" ).validate( {
+            rules: {
+                Password: {
+                     required: true
+                },
+                Email: {
+                    required: true,
+                    email: true
+                },
+            },
+            messages: {
+                Password: "Please enter your password",
+                email: "Please enter a valid email address",
+            },
+            errorElement: "em",
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( "help-block" );
+
+                if ( element.prop( "type" ) === "checkbox" ) {
+                    error.insertAfter( element.parent( "label" ) );
+                } else {
+                    error.insertAfter( element );
+                }
+
+                error.addClass('invalid-feedback');
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).parents( ".questionInput" ).addClass( "has-error" ).removeClass( "has-success" );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).parents( ".questionInput" ).addClass( "has-success" ).removeClass( "has-error" );
+            },
+            submitHandler: function (e) {
+             $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SignInAsync","Account")',
+                 data: $( "#signInUser" ).serialize(),
+                 success: function(data, textStatus, jqXHR){
+                     window.location.replace(data);
+                 },
+                 error: function(jqXHR, textStatus, errorThrown){
+                     console.log(errorThrown);
+                 }
+             });
+            }
+        } );
+    });
+</script>
+}

@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+@using SupaMVCSample.Models
+@using SupaMVCSample.Enums
+@model SignUpWithEmailAndPassword
+
+<div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+<div class="card-body">
+    <form id="signupUser" method="post" action="" novalidate="novalidate">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="form-floating mb-3 mb-md-0">
+                    <input class="form-control" id="GivenName" name="GivenName" type="text" placeholder="Enter your first name" />
+                    <label for="GivenName">First name</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input class="form-control" id="Surname" name="Surname" type="text" placeholder="Enter your last name" />
+                    <label for="Surname">Last name</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" id="Email" type="email" name="Email" placeholder="name@example.com" />
+            <label for="Email">Email address</label>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="form-floating mb-3 mb-md-0">
+                    <input class="form-control" id="Password" type="password" name="Password" placeholder="Create a password" />
+                    <label for="Password">Password</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating mb-3 mb-md-0">
+                    <input class="form-control" id="PasswordConfirm" type="password" name="PasswordConfirm" placeholder="Confirm password" />
+                    <label for="PasswordConfirm">Confirm Password</label>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <select class="form-select" id="RoleId" name="RoleId" asp-items="Html.GetEnumSelectList<RolesEnum>()">
+                <option value="">Choose a Role</option>
+            </select>
+        </div>
+        <div class="mt-4 mb-0">
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="card-footer text-center py-3">
+    <div class="small"><a asp-area="" asp-controller="Account" asp-action="Login">Have an account? Go to login</a></div>
+</div>
+
+
+@section Scripts{
+<script>
+        $(document).ready( function () {
+        $( "#signupUser" ).validate( {
+            rules: {
+                GivenName: "required",
+                Surname: "required",
+                Email: {
+                    required: true,
+                    email: true
+                },
+                Password:{
+                    required: true,
+                    minlength: 10,
+                },
+                PasswordConfirm:{
+                    equalTo: "#Password",
+                },
+                RoleId: "required",
+            },
+            messages: {
+                GivenName: "Please enter your firstname",
+                Surename: "Please enter your lastname",
+                Email: "Please enter a valid email address",
+            },
+            errorElement: "em",
+            errorPlacement: function ( error, element ) {
+                // Add the `help-block` class to the error element
+                error.addClass( "help-block" );
+
+                if ( element.prop( "type" ) === "checkbox" ) {
+                    error.insertAfter( element.parent( "label" ) );
+                } else {
+                    error.insertAfter( element );
+                }
+
+                error.addClass('invalid-feedback');
+            },
+            highlight: function ( element, errorClass, validClass ) {
+                $( element ).parents( ".questionInput" ).addClass( "has-error" ).removeClass( "has-success" );
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $( element ).parents( ".questionInput" ).addClass( "has-success" ).removeClass( "has-error" );
+            },
+            submitHandler: function (e) {
+             $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SignUpAsync","Account")',
+                 data: $( "#createUserAccount" ).serialize(),
+                 success: function(data, textStatus, jqXHR){
+
+                 },
+                 dataType: 'json'
+             });
+            }
+        } );
+    });
+</script>
+}
