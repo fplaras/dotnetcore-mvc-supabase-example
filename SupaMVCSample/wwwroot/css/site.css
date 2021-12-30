@@ -1,0 +1,34 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+#layoutAuthentication {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+    #layoutAuthentication #layoutAuthentication_content {
+        min-width: 0;
+        flex-grow: 1;
+    }
+
+    #layoutAuthentication #layoutAuthentication_footer {
+        min-width: 0;
+    }
