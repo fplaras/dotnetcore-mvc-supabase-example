@@ -83,6 +83,10 @@ namespace SupaMVCSample.Controllers
                 {
                     return Ok(signInUser.RedirectUrl);
                 }
+                else
+                {
+                    return BadRequest("Unable to redirect. Invalid Url.");
+                }
 
             }
         }
